@@ -1,0 +1,6 @@
+# removing images
+face/in/
+face/out/
+front/animation.*
+front/node_modules
+front/background.*

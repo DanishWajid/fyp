@@ -1,0 +1,3 @@
+sudo apt-get install portaudio19
+pip install --global-option='build_ext' --global-option='-I/usr/local/include' --global-option='-L/usr/local/lib' pyaudio
+sudo apt-get install libav-tools
