@@ -36,6 +36,9 @@ class Head(object):
         self.bot = Bot(current_user)
 
     def start(self):
+        dubug_mode = False  #-----------------------------------------------testing
+        # dubug_mode = True
+
         with tf.Graph().as_default():
             gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.6)
             sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
@@ -74,6 +77,8 @@ class Head(object):
 
                 pred_list = []
 
+                self.face_recog_start()
+
                 while True:
 
                     if self.bot.check_user_logedin():
@@ -81,6 +86,7 @@ class Head(object):
 
                     else:
                         # do face recognition
+                        if face_recog_running
                 
                         ret, frame = video_capture.read()
 
@@ -126,6 +132,7 @@ class Head(object):
                                     scaled[0] = facenet.prewhiten(scaled[0])
                                     scaled_reshape.append(scaled[0].reshape(-1,input_image_size,input_image_size,3))
                                     feed_dict = {images_placeholder: scaled_reshape[0], phase_train_placeholder: False}
+                                    
                                     emb_array[0, :] = sess.run(embeddings, feed_dict=feed_dict)
                                     
                                     predictions = model.predict_proba(emb_array)
@@ -155,28 +162,24 @@ class Head(object):
                                             continue
 
                                             
+                                    if dubug_mode:
+                                        cv2.rectangle(frame, (bb[i][0], bb[i][1]), (bb[i][2], bb[i][3]), (0, 255, 0), 2)    #boxing face
 
-                                    cv2.rectangle(frame, (bb[i][0], bb[i][1]), (bb[i][2], bb[i][3]), (0, 255, 0), 2)    #boxing face
+                                        #plot result idx under box
+                                        text_x = bb[i][0]
+                                        text_y = bb[i][3] + 20
 
-                                    #plot result idx under box
-                                    text_x = bb[i][0]
-                                    text_y = bb[i][3] + 20
+                                        for H_i in HumanNames:
+                                            if HumanNames[best_class_indices[0]] == H_i:
+                                                result_names = HumanNames[best_class_indices[0]]
+                                                cv2.putText(frame, result_names, (text_x, text_y), cv2.FONT_HERSHEY_COMPLEX_SMALL,
+                                                            1, (0, 0, 255), thickness=1, lineType=2)
 
-
-
-                                    for H_i in HumanNames:
-                                        if HumanNames[best_class_indices[0]] == H_i:
-                                            result_names = HumanNames[best_class_indices[0]]
-                                            cv2.putText(frame, result_names, (text_x, text_y), cv2.FONT_HERSHEY_COMPLEX_SMALL,
-                                                        1, (0, 0, 255), thickness=1, lineType=2)
-
-
-                        cv2.imshow('Video', frame)
+                        if dubug_mode:
+                            cv2.imshow('Video', frame)
                         cv2.waitKey(1)
 
             # outside while true
-
-
 
 
     def signin(self, usr):
@@ -186,6 +189,9 @@ class Head(object):
                 user_obj = user(_id_arg=u[0], _super_arg=u[1], username_arg=u[2], password_arg=u[3])
                 self.bot.update_current_user(user_obj)
 
+
+    def face_recog_start(self):
+        self.bot.__text_action("Please face the camera So i can log you in.")
 
 
 class user():

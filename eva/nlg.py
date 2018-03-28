@@ -9,6 +9,8 @@ class NLG(object):
     def __init__(self, user_name=None):
         self.user_name = user_name
 
+    def change_user(self, user_name=None):
+        self.user_name = user_name
 
     def joke(self):
         jokes = [
@@ -45,3 +47,15 @@ class NLG(object):
         ]
 
         return random.choice(phrases)
+
+    def greet(self):
+        phrases = [
+            "Hello",
+            "Hi",
+            "Hiya",
+            "Welcome",
+            "Hola",
+            "Hey there"
+        ]
+
+        return random.choice(phrases)+"  "+self.user_name+"  , how can i help you"

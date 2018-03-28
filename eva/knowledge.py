@@ -2,13 +2,15 @@ import requests
 import json
 import feedparser
 import datetime
+from wikiapi import WikiApi
+
 
 
 class Knowledge(object):
+
     def __init__(self, _current_user):
         self.current_user = _current_user
         self.apiurl = "https://mshahzaib.pythonanywhere.com"
-
 
     def find_weather(self):
 
@@ -45,7 +47,9 @@ class Knowledge(object):
 
         return headlines
 
-        # return ret_headlines
+    def get_wiki(self, query):
+        wiki = WikiApi()
+        return wiki.get_article(wiki.find(query)[0]).summary
 
     def todo(self):
         print("getting todo:",self.apiurl + "/todo/get")
@@ -64,7 +68,6 @@ class Knowledge(object):
         for note in resp["notes"]:
             toReturn.append(note[3])
         return toReturn
-
 
     def add_user(self, user_obj):
         print("adding user")
@@ -85,4 +88,6 @@ class Knowledge(object):
 
         return toReturn
 
-
+def add_user(self, todo, user_id):
+        print("adding todo")
+        r = requests.get(self.apiurl + "/todo/add/"+todo+"&"+user_id)

@@ -4,3 +4,6 @@ face/out/
 front/animation.*
 front/node_modules
 front/background.*
+
+face/__pycache__
+eva/__pycache__

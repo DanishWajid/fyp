@@ -37,7 +37,6 @@ to_do_list_state = 14
 consult_encyclopedia_state = 15
 logout_state = 16
 
-
 class Bot(object):
 
     def __init__(self, user_obj):
@@ -49,10 +48,11 @@ class Bot(object):
         self.speech = Speech()
         self.knowledge = Knowledge(user_obj)
 
-        self.new_user = None
+        self.new_user = user_obj
         self.alarm = None
         self.users = self.knowledge.update_users_list()
         self.state = float(normal_state)
+        self.start_time = float(normal_state)
         
         
     # main loop
@@ -60,6 +60,8 @@ class Bot(object):
         text = self.listen_loop()
         if text:
             self.generate_response(text)
+
+        #
 
     def listen_loop(self):
         recognizer, audio = self.speech.listen_for_audio()
@@ -77,11 +79,9 @@ class Bot(object):
 
     def update_current_user(self, user_obj):
         self.current_user = user_obj
+        self.nlg.change_user(user_obj.username)
+        self.__text_action(self.nlg.greet())
 
-        print (user_obj._id)
-        print(user_obj._super)
-        print(user_obj.username)
-        print(user_obj.password)
 
     def generate_response(self, text=None):
         if text is not None:
@@ -102,11 +102,13 @@ class Bot(object):
                 entities = None
                 intent = None
 
-                if 'entities' in json_resp and 'Intent' in json_resp['entities']:
+                if 'entities' in json_resp :
                     entities = json_resp['entities']
-                    intent = json_resp['entities']['Intent'][0]["value"]
+                    
 
-                print (intent)
+                if 'entities' in json_resp and 'Intent' in json_resp['entities']:
+                    intent = json_resp['entities']['Intent'][0]["value"]
+                
 
                 # check which in state eva is in
 
@@ -130,11 +132,53 @@ class Bot(object):
                         self.__todo()
                     elif intent == 'get_note':
                         self.__note()
+                    elif 'entities' in json_resp and 'wikipedia_search_query' in json_resp['entities']:
+                        self.__wiki_action(json_resp['entities']['wikipedia_search_query'][0]["value"])
                     else: # No recognized intent
                         self.__text_action("I'm sorry, I don't know about that yet.")
                         return
 
-                if floor(self.state) == float(set_alarm_state):# add alarm end
+                ######################                      ######################                      ######################
+
+
+                # if floor(self.state) == float(consult_encyclopedia_state):
+
+                #     if self.state == float(consult_encyclopedia_state) + 0.0:
+
+                #         time_for_alarm = None
+
+                #         if 'entities' in json_resp and 'datetime' in json_resp['entities']:
+                #             time_for_alarm = json_resp['entities']['datetime'][0]["values"][0]["value"]
+
+                #         if time_for_alarm:
+                #             self.alarm = time_for_alarm[11:17]
+                #             self.state = float(set_alarm_state) + 0.1
+                #             self.__text_action("you sure you want to setup alarm for " + time_for_alarm[11:17] + " ?")
+                #             return
+                #         else: # No recognized intent
+                #             self.__text_action("I'm sorry, Please tell the alarm time again")
+                #             self.state = normal_state
+                #             return
+
+                #     if self.state == float(consult_encyclopedia_state) + 0.1:
+
+                #         if intent == 'yes':
+                #             self.knowledge.set_alarm(self.alarm)
+                #             self.state = normal_state
+                #             self.__text_action("alarm set")
+                #             return
+                #         elif intent == 'no':
+                #             self.__text_action("Please tell correct alarm time")
+                #             self.state = normal_state
+                #             return
+                #         else: # No recognized intent
+                #             self.state = normal_state
+                #             self.__text_action("I'm sorry, I don't know about that yet.")
+                #             return
+                
+                #############################################################################################################
+
+                if floor(self.state) == float(set_alarm_state):
 
                     if self.state == float(set_alarm_state) + 0.0:
 
@@ -168,6 +212,9 @@ class Bot(object):
                             self.state = normal_state
                             self.__text_action("I'm sorry, I don't know about that yet.")
                             return
+                
+                #############################################################################################################
+
 
                 if floor(self.state) == float(add_user_state):
             
@@ -281,18 +328,25 @@ class Bot(object):
         if listin is not None:
             requests.get("http://localhost:8080", {"list": "_".join(listin)} )
             for sentns in listin:
-                self.speech.synthesize_text(sentns)
-            
+                self.speech.synthesize_text(sentns)            
 
     def __news_action(self):
 
         headlines = self.knowledge.get_news()
 
         if headlines:
-            # requests.post("http://localhost:8080/news", data=json.dumps({"articles":headlines}))
             self.__list_action(headlines)
         else:
             self.__text_action("I had some trouble finding news for you")
+
+    def __wiki_action(self, q):
+
+        summary = self.knowledge.get_wiki(q)
+  
+        if summary:
+            self.__text_action(summary)
+        else:
+            self.__text_action("I had some trouble finding about "+q)
 
     def __weather_action(self, nlu_entities=None):
 
