@@ -41,13 +41,11 @@ class Bot(object):
 
     def __init__(self, user_obj):
         self.current_user = None
-
-        # self.update_current_user(user_obj) ____________________________________________________testing
-
-        self.nlg = NLG(user_obj.username if user_obj is not None else None)
+        self.nlg = NLG()
         self.speech = Speech()
         self.knowledge = Knowledge(user_obj)
-
+            
+        # self.update_current_user(user_obj) #____________________________________________________testing
         self.new_user = user_obj
         self.alarm = None
         self.users = self.knowledge.update_users_list()
@@ -60,8 +58,6 @@ class Bot(object):
         text = self.listen_loop()
         if text:
             self.generate_response(text)
-
-        #
 
     def listen_loop(self):
         recognizer, audio = self.speech.listen_for_audio()
@@ -132,6 +128,8 @@ class Bot(object):
                         self.__todo()
                     elif intent == 'get_note':
                         self.__note()
+                    elif intent == 'currency':
+                        self.__currency()
                     elif 'entities' in json_resp and 'wikipedia_search_query' in json_resp['entities']:
                         self.__wiki_action(json_resp['entities']['wikipedia_search_query'][0]["value"])
                     else: # No recognized intent
@@ -319,6 +317,17 @@ class Bot(object):
         notes = self.knowledge.note()
         self.__list_action(notes)
 
+    def __currency(self):
+        currency = self.knowledge.find_currency()
+        if currency:
+            
+            self.__currency_action(currency)
+        else:
+            self.__text_action("I had some trouble finding currency rates for you")
+
+    def text_action(self, text=None):
+        self.__text_action(text)
+
     def __text_action(self, text=None):
         if text is not None:
             requests.get("http://localhost:8080", {"text": text} )
@@ -328,7 +337,12 @@ class Bot(object):
         if listin is not None:
             requests.get("http://localhost:8080", {"list": "_".join(listin)} )
             for sentns in listin:
-                self.speech.synthesize_text(sentns)            
+                self.speech.synthesize_text(sentns)  
+
+    def __currency_action(self, currencyrates=None):
+        if currencyrates is not None:
+            requests.get("http://localhost:8080", {"currency": ','.join(str(v) for v in currencyrates)} )
+            print()          
 
     def __news_action(self):
 
@@ -355,6 +369,24 @@ class Bot(object):
 
         self.__list_action(weather_speech)
 
-    def __maps_action(self, nlu_entities=None):
-        pass
+    def __maps_action(self,entities):
+
+        location = None
+        
+        if entities is not None:
+            if 'location' in entities:
+                location = entities['location'][0]["value"]
+            if "wikipedia_search_query" in entities:
+                location = entities['wikipedia_search_query'][0]["value"]
+
+        if location is not None:
+            maps_url = self.knowledge.get_map_url(location)
+            maps_action = "Sure. Here's a map of %s." % location
+            body = {'url': maps_url}                       
+            # requests.post("http://localhost:8080/image", data=json.dumps(body))
+            print(body)
+            requests.get("http://localhost:8080", {"image":(maps_url)} )
+            self.speech.synthesize_text(maps_action)
+        else:
+            self.__text_action("I'm sorry, I couldn't understand what location you wanted.")
 

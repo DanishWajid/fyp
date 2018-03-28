@@ -36,7 +36,7 @@ class Head(object):
         self.bot = Bot(current_user)
 
     def start(self):
-        dubug_mode = False  #-----------------------------------------------testing
+        dubug_mode = True  #-----------------------------------------------testing
         # dubug_mode = True
 
         with tf.Graph().as_default():
@@ -55,7 +55,12 @@ class Head(object):
                 image_size = 182
                 input_image_size = 160
 
-                HumanNames = os.listdir("in/")
+                HumanNames = []
+                
+                with open("names") as f:
+                    for line in f:
+                        HumanNames.append(line.strip())
+                        
                 HumanNames.sort()                 #train human name
 
                 modeldir = 'model.pb'
@@ -86,7 +91,6 @@ class Head(object):
 
                     else:
                         # do face recognition
-                        if face_recog_running
                 
                         ret, frame = video_capture.read()
 
@@ -191,7 +195,7 @@ class Head(object):
 
 
     def face_recog_start(self):
-        self.bot.__text_action("Please face the camera So i can log you in.")
+        self.bot.text_action("Please face the camera So i can log you in.")
 
 
 class user():

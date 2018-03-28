@@ -49,7 +49,10 @@ class Knowledge(object):
 
     def get_wiki(self, query):
         wiki = WikiApi()
-        return wiki.get_article(wiki.find(query)[0]).summary
+        toReturn = wiki.get_article(wiki.find(query)[0]).summary
+        if len(toReturn) > 220:
+            toReturn = toReturn[:toReturn.find(".", 220)]
+        return toReturn
 
     def todo(self):
         print("getting todo:",self.apiurl + "/todo/get")
@@ -88,6 +91,28 @@ class Knowledge(object):
 
         return toReturn
 
-def add_user(self, todo, user_id):
+    def add_user(self, todo, user_id):
         print("adding todo")
         r = requests.get(self.apiurl + "/todo/add/"+todo+"&"+user_id)
+
+    def find_currency(self):   
+
+        # Where pkr is the base currency you want to use
+        url = 'https://v3.exchangerate-api.com/bulk/fe12dc4317270c8c24e99e6a/PKR'
+
+        # Making our request
+        response = requests.get(url)
+        curr_json = json.loads(response.text)
+        currency = []
+        
+        currency.append(1/curr_json['rates']['USD'])
+        currency.append(1/curr_json['rates']['EUR'])
+        currency.append(1/curr_json['rates']['GBP'])
+        currency.append(1/curr_json['rates']['SAR'])
+        currency.append(1/curr_json['rates']['CAD'])
+        currency.append(1/curr_json['rates']['AUD'])
+        
+        return currency
+
+    def get_map_url(self, location):
+        return "http://maps.googleapis.com/maps/api/staticmap?center=%s&zoom=15&scale=true&size=1200x600&maptype=roadmap&format=png" % locationip

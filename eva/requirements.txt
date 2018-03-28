@@ -5,3 +5,5 @@ python-dateutil
 pydub
 feedparser
 numpy
+pillow
+pyaudio
