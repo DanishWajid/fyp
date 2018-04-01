@@ -1,5 +1,4 @@
 import random
-import datetime
 
 
 class NLG(object):
@@ -25,11 +24,13 @@ class NLG(object):
 
     def weather(self, in_dict):
 
-        sentence1 = "The current temperature is " + str(in_dict["temperature"]) + " fahrenheit"
+        sentence1 = "The current temperature is " + \
+            str(in_dict["temperature"]) + " fahrenheit"
         sentence2 = "The windSpeed is " + str(in_dict["windSpeed"])
-        sentence3 = "The forecast for today is " + str(in_dict["current_forecast"])
-        
-        ret_phrase = [sentence1,sentence2,sentence3]
+        sentence3 = "The forecast for today is " + \
+            str(in_dict["current_forecast"])
+
+        ret_phrase = [sentence1, sentence2, sentence3]
         return ret_phrase
 
     def appreciation(self):
@@ -50,10 +51,8 @@ class NLG(object):
         phrases = [
             "Hello",
             "Hi",
-            "Hiya",
             "Welcome",
-            "Hola",
             "Hey there"
         ]
 
-        return random.choice(phrases)+"  "+self.user_name+"  , how can i help you"
+        return random.choice(phrases) + "  " + self.user_name + " , how can i help you"

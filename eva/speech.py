@@ -1,11 +1,10 @@
-# speech.py
-# speechrecognition, pyaudio, brew install portaudio
 import speech_recognition as sr
 import os
 import requests
 from gtts import gTTS
 from pydub import AudioSegment
 from pydub.playback import play
+
 
 class Speech(object):
     def __init__(self):
@@ -29,12 +28,11 @@ class Speech(object):
         with m as source:
             r.adjust_for_ambient_noise(source)
             print("I'm listening")
-            requests.get("http://localhost:8080", {"prompt": "I'm listening"} )
+            requests.get("http://localhost:8080", {"prompt": "I'm listening"})
             audio = r.listen(source)
 
-        
-        print ("Found audio")
-        requests.get("http://localhost:8080", {"prompt": "Found audio"} )
+        print("Found audio")
+        requests.get("http://localhost:8080", {"prompt": "Found audio"})
         return r, audio
 
     def get_text(self, recognizer, audio):

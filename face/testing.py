@@ -1,14 +1,10 @@
 
+import requests
 
+apiurl = "https://mshahzaib.pythonanywhere.com"
 
-from wikiapi import WikiApi
-wiki = WikiApi()
-x = wiki.get_article(wiki.find("islamabad")[0]).summary
+_id = 2
+choice = 4
+msg = "asdf"
 
-
-print("\n\n\n")
-print(len(x))
-print("\n\n\n")
-print(x[:500])
-print("\n\n\n")
-
+r = requests.get(apiurl + "/note/add/"+"sender"+"&"+msg+"&"+"this time"+"&"+str(choice))

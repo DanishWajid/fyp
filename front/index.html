@@ -1,288 +1,309 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>EVA</title>
-    <style>
-      
-      body {
-          margin: 0;
-          font-family:system-ui, -apple-system, BlinkMacSystemFont, "San Francisco", "Lucida Grande";
-          font-size: 17px;
-          text-align: center;
-          
-      }     
-      
-      #myVideo {
-          position:fixed;
-          right: -50px;
-          bottom: 0;
-          min-width: 100%; 
-          min-height: 100%;
-      }
-      #text_div {        
-        
-        margin-top:1%; 
-        /*padding: 100px;*/
-        background-color:rgba(255,255,255,0.4);;
-        border-radius:15px;
-        position:absolute;
-        width: 50%;   
-        content: center;  
-        margin-left: 25%;
-        padding: 10px; 
-            
-        
-        }
-     
-          
-      #div1 {        
-        
-        margin-top:1%; 
-        padding: 1%;
-        background: rgba(30,144,255,0.4);
-        border-radius:15px;
-        position:relative;
-        width: 50%;   
-        margin-left: 30%;
-        visibility:hidden;
-        text-align: justify;
-         
-        }
-        
-      #div2 {        
-        
-        
-        padding: 1%;
-        background: rgba(9,94,204,0.4);
-        border-radius:15px;
-        position:relative;
-        width: 50%;    
-        margin-left: 30%;
-        visibility:hidden;
-        text-align: justify;
-         
-        }
-      #div3 {        
-        
-        
-        padding: 1%;
-        background: rgba(137,104,205,0.4);
-        border-radius:15px;
-        position:relative;
-        width: 50%;   
-        margin-left: 30%;
-        visibility:hidden;
-        text-align: justify;
-         
-        }
-      #div4 {        
-        
-        
-        padding: 1%;
-        background: rgba(93,71,139,0.4);
-        border-radius:15px;
-        position:relative;
-        width: 50%;   
-        margin-left: 30%;
-        visibility:hidden;
-        text-align: justify;
-         
-        }
-      #div5 {        
-        
-        
-        padding: 1%;
-        background: rgba(103,81,159,0.4);
-        border-radius:15px;
-        position:relative;
-        width: 50%;    
-        margin-left: 30%;
-        visibility:hidden;
-        text-align: justify;
-         
-        }
-      #tbl-header{
-        background: -webkit-linear-gradient(left, #0D757D, #15BFCC);
-        background: linear-gradient(to right, #0D757D, #15BFCC);
-        padding-top: 10px;
-        margin-top:1%; 
-        
-        background-color:rgba(255,255,255,0.4);;
-        border-radius:15px;
-        position:absolute;
-        width: 50%;   
-        content: center;  
-        margin-left: 25%;
-        
-      }
-    
-      h1 ,#prompt_div h4{ 
-        
-        color: #fefefe;
-        font-weight: normal; 
-      }
-      #prompt_div {
-        
-        position:fixed;
-        left: 0;
-        bottom: 0;
-        margin-top: 90%; 
-        margin-bottom: 1%;
-        margin-left: 1%;
-        padding-left: 7.5%;
-        padding-right: 7.5%;
-        background: rgba(255,255,255,0.3);
-        border-radius:15px;
-        }
-       [id='1'],[id='2'],[id='4'],[id='3'],[id='5'],[id=tbl-header]{
-          visibility: hidden;
-        }
-        
-        table{
-          width:100%;
-          table-layout: fixed;
-          
-        }
-        #tr1{
-          background: rgba(0,0,0,0.35);}
-        tr:nth-child(even) {
-          background: rgba(0,0,0,0.15);
-        }
 
-        .tbl-header{
-          background-color: rgba(255,255,255,0.3);
-         }
-        .tbl-content{
-          height:300px;
-          overflow-x:auto;
-          margin-top: 0px;
-          border: 1px solid rgba(255,255,255,0.3);
-        }
-        th{
-          padding: 20px 15px;
-          text-align: left;
-          font-weight: 500;
-          font-size: 12px;
-          color: #fff;
-          text-transform: uppercase;
-        }
-        td{
-          padding: 15px;
-          text-align: left;
-          vertical-align:middle;
-          font-weight: 300;
-          font-size: 12px;
-          color: #fff;
-          border-bottom: solid 1px rgba(255,255,255,0.1);
-        }
+<head>
+  <meta charset="UTF-8">
+  <title>EVA</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "San Francisco", "Lucida Grande";
+      font-size: 17px;
+      text-align: center;
+
+    }
+
+    #myVideo {
+      position: fixed;
+      right: -50px;
+      bottom: 0;
+      min-width: 100%;
+      min-height: 100%;
+    }
+
+    #text_div {
+
+      margin-top: 1%;
+      /*padding: 100px;*/
+      background-color: rgba(255, 255, 255, 0.4);
+      ;
+      border-radius: 15px;
+      position: absolute;
+      width: 50%;
+      content: center;
+      margin-left: 25%;
+      padding: 10px;
 
 
-        /* demo styles */
+    }
 
-        
-        body{
-          background: -webkit-linear-gradient(left, #25c481, #25b7c4);
-          background: linear-gradient(to right, #25c481, #25b7c4);
-          
-        }
-      
-      </style>
-  </head>
-  <body>
 
-    <video autoplay muted loop id="myVideo">
+    #div1 {
+
+      margin-top: 1%;
+      padding: 1%;
+      background: rgba(30, 144, 255, 0.4);
+      border-radius: 15px;
+      position: relative;
+      width: 50%;
+      margin-left: 30%;
+      visibility: hidden;
+      text-align: justify;
+
+    }
+
+    #div2 {
+
+
+      padding: 1%;
+      background: rgba(9, 94, 204, 0.4);
+      border-radius: 15px;
+      position: relative;
+      width: 50%;
+      margin-left: 30%;
+      visibility: hidden;
+      text-align: justify;
+
+    }
+
+    #div3 {
+
+
+      padding: 1%;
+      background: rgba(137, 104, 205, 0.4);
+      border-radius: 15px;
+      position: relative;
+      width: 50%;
+      margin-left: 30%;
+      visibility: hidden;
+      text-align: justify;
+
+    }
+
+    #div4 {
+
+
+      padding: 1%;
+      background: rgba(93, 71, 139, 0.4);
+      border-radius: 15px;
+      position: relative;
+      width: 50%;
+      margin-left: 30%;
+      visibility: hidden;
+      text-align: justify;
+
+    }
+
+    #div5 {
+
+
+      padding: 1%;
+      background: rgba(103, 81, 159, 0.4);
+      border-radius: 15px;
+      position: relative;
+      width: 50%;
+      margin-left: 30%;
+      visibility: hidden;
+      text-align: justify;
+
+    }
+
+    #tbl-header {
+      background: -webkit-linear-gradient(left, #0D757D, #15BFCC);
+      background: linear-gradient(to right, #0D757D, #15BFCC);
+      padding-top: 10px;
+      margin-top: 1%;
+
+      background-color: rgba(255, 255, 255, 0.4);
+      ;
+      border-radius: 15px;
+      position: absolute;
+      width: 50%;
+      content: center;
+      margin-left: 25%;
+
+    }
+
+    h1,
+    #prompt_div h4 {
+
+      color: #fefefe;
+      font-weight: normal;
+    }
+
+    #prompt_div {
+
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      margin-top: 90%;
+      margin-bottom: 1%;
+      margin-left: 1%;
+      padding-left: 7.5%;
+      padding-right: 7.5%;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+    }
+
+    [id='1'],
+    [id='2'],
+    [id='4'],
+    [id='3'],
+    [id='5'],
+    [id=tbl-header] {
+      visibility: hidden;
+    }
+
+    table {
+      width: 100%;
+      table-layout: fixed;
+
+    }
+
+    #tr1 {
+      background: rgba(0, 0, 0, 0.35);
+    }
+
+    tr:nth-child(even) {
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .tbl-header {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .tbl-content {
+      height: 300px;
+      overflow-x: auto;
+      margin-top: 0px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    th {
+      padding: 20px 15px;
+      text-align: left;
+      font-weight: 500;
+      font-size: 12px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 15px;
+      text-align: left;
+      vertical-align: middle;
+      font-weight: 300;
+      font-size: 12px;
+      color: #fff;
+      border-bottom: solid 1px rgba(255, 255, 255, 0.1);
+    }
+
+
+    /* demo styles */
+
+    body {
+      background: -webkit-linear-gradient(left, #25c481, #25b7c4);
+      background: linear-gradient(to right, #25c481, #25b7c4);
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <video autoplay muted loop id="myVideo">
     <source src="background.webm">
       Your browser does not support HTML5 video.
     </video>
-     
-    
-    
-    <div id="text_div">
-        <h1 id="text">Hello!</h1> 
-    
-    </div> 
-    <div id="tbl-header">
-      <h1>Currency Rates</h1>
-      <table id="tbl" cellpadding="0" cellspacing="0" border="0">
-        <thead>
-          <tr id="tr1">
-            <th>Currency</th>
-            <th>Symbol</th>
-            <th>Rate</th>
-            
-          </tr>
-        </thead>
-              <tbody>
-          <tr>
-            <td>U.S. Dollar</td>
-            <td>USD </td>
-            <td>$1.38</td>
-            
-          </tr>
-          <tr>
-            <td>Euro</td>
-            <td>EUR</td>
-            <td>$2.38</td>
-            
-          </tr>
-          <tr>
-            <td>British Pound</td>
-            <td>GBP</td>
-            <td>$3.22</td>
-            
-          </tr>
-          <tr>
-            <td>Saudi Riyal</td>
-            <td>SAR</td>
-            <td>$1.02</td>
-           
-          </tr>
-          <tr>
-            <td>Canadian Dollar</td>
-            <td>CAD</td>
-            <td>$1.38</td>
-           
-          </tr>
-          <tr>
-            <td>Australian Dollar</td>
-            <td>AUD</td>
-            <td>$2.38</td>
-           
-          </tr>
-          
-        </tbody>
-      </table>
-    </div>
-    <div id="div1">
-        <h1 id='1'>Hello!</h1>       
-    
-    </div> 
-      
-    <div id="div2">
-        <h1 id='2'>Hello!</h1>       
-    </div>
-    <div id="div3">
-        <h1 id='3'>Hello!</h1>       
-    </div>
-    <div id="div4">
-        <h1 id="4">Hello!</h1>   
-    </div>
-    
-    <div id="div5">
-        <h1 id='5'>Hello!</h1>       
-    </div>
-   
 
 
-    
-    <div id="prompt_div">        
-      <h4 id='prompt'>I'm Listening</h4>          
-    </div>
-    
 
-    <script type="text/javascript">
-      require('./main_page.js')
-    </script>
-  </body>
+  <div id="text_div">
+    <h1 id="text">Hello!</h1>
+
+  </div>
+  <div id="tbl-header">
+    <h1>Currency Rates</h1>
+    <table id="tbl" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+        <tr id="tr1">
+          <th>Currency</th>
+          <th>Symbol</th>
+          <th>Rate</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>U.S. Dollar</td>
+          <td>USD </td>
+          <td>$1.38</td>
+
+        </tr>
+        <tr>
+          <td>Euro</td>
+          <td>EUR</td>
+          <td>$2.38</td>
+
+        </tr>
+        <tr>
+          <td>British Pound</td>
+          <td>GBP</td>
+          <td>$3.22</td>
+
+        </tr>
+        <tr>
+          <td>Saudi Riyal</td>
+          <td>SAR</td>
+          <td>$1.02</td>
+
+        </tr>
+        <tr>
+          <td>Canadian Dollar</td>
+          <td>CAD</td>
+          <td>$1.38</td>
+
+        </tr>
+        <tr>
+          <td>Australian Dollar</td>
+          <td>AUD</td>
+          <td>$2.38</td>
+
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+  <div id="div1">
+    <h1 id='1'>Hello!</h1>
+
+  </div>
+
+  <div id="div2">
+    <h1 id='2'>Hello!</h1>
+  </div>
+  <div id="div3">
+    <h1 id='3'>Hello!</h1>
+  </div>
+  <div id="div4">
+    <h1 id="4">Hello!</h1>
+  </div>
+
+  <div id="div5">
+    <h1 id='5'>Hello!</h1>
+  </div>
+
+
+
+
+  <div id="prompt_div">
+    <h4 id='prompt'>I'm Listening</h4>
+  </div>
+
+
+  <script type="text/javascript">
+    require('./main_page.js')
+  </script>
+</body>
+
 </html>
