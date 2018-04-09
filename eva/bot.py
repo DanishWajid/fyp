@@ -115,10 +115,10 @@ class Bot(object):
                         self.state = float(add_user_state)
                     elif intent == 'del_user':
                         self.state = float(delete_user_state)
+                    elif intent == 'set_todo' or ("add" in text and "task" in text):
+                        self.__set_todo()
                     elif intent == 'get_todo':
                         self.__get_todo()
-                    elif intent == 'set_todo':
-                        self.__set_todo()
                     elif intent == 'set_note':
                         self.state = float(set_note_state)
                     elif intent == 'set_reminder':

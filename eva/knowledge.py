@@ -63,7 +63,8 @@ class Knowledge(object):
         resp = json.loads(r.text)
         toReturn = []
         for note in resp["todos"]:
-            toReturn.append(note[1])
+            if note[2] == self.current_user._id:
+                toReturn.append(note[1])
         return toReturn
 
     def set_todo(self, todo, user_id):
@@ -76,7 +77,8 @@ class Knowledge(object):
         resp = json.loads(r.text)
         toReturn = []
         for note in resp["notes"]:
-            toReturn.append(note[2] + "<br>" + note[1] +
+            if note[4] == self.current_user._id:
+                toReturn.append(note[2] + "<br>" + note[1] +
                             "<span style='float:right';>" + note[3] + "</span>")
         return toReturn
 
@@ -120,8 +122,7 @@ class Knowledge(object):
 
     def find_currency(self):
         # pkr is the base currency you want to use
-        url = '''https://v3.exchangerate-api.com/bulk/
-               fe12dc4317270c8c24e99e6a/PKR'''
+        url = "https://v3.exchangerate-api.com/bulk/fe12dc4317270c8c24e99e6a/PKR"
 
         # Making our request
         response = requests.get(url)
@@ -138,6 +139,4 @@ class Knowledge(object):
         return currency
 
     def get_map_url(self, location):
-        return '''http://maps.googleapis.com/maps/api/staticmap?
-                  center=%s&zoom=15&scale=true&size=1200x600&
-                  maptype=roadmap&format=png''' % location
+        return "http://maps.googleapis.com/maps/api/staticmap?center=%s&zoom=15&scale=true&size=1200x600&maptype=roadmap&format=png" % location

@@ -261,7 +261,7 @@ if __name__ == "__main__":
         requests.get("http://localhost:8080", {"text": "Hello"})
     except Exception as e:
         print("Please run the 'front' first")
-        quit(0)
+        
 
     test_user = user(_id_arg=1, _super_arg="yes",
                      username_arg="Admin", password_arg="pass123")
