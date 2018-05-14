@@ -33,7 +33,7 @@ class NLG(object):
         ret_phrase = [sentence1, sentence2, sentence3]
         return ret_phrase
 
-    def appreciation(self):
+    def done(self):
         phrases = [
             "No problem!",
             "Any time",

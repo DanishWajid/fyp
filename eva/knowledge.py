@@ -67,9 +67,9 @@ class Knowledge(object):
                 toReturn.append(note[1])
         return toReturn
 
-    def set_todo(self, todo, user_id):
+    def set_todo(self, todo):
         print("adding todo")
-        requests.get(self.apiurl + "/todo/add/" + todo + "&" + user_id)
+        requests.get(self.apiurl + "/todo/add/" + todo + "&" + str(self.current_user._id))
 
     def get_note(self):
         print("getting note")

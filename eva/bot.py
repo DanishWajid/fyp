@@ -23,6 +23,10 @@ to_do_list_state = 6
 consult_encyclopedia_state = 7
 set_note_state = 8
 logout_state = 9
+map_state = 10
+set_todo_state = 11
+currency_state = 12
+idle_state = 100
 
 
 class Bot(object):
@@ -39,6 +43,7 @@ class Bot(object):
         self.msg = None
         self.users = self.knowledge.update_users_list()
         self.state = normal_state
+        self.speak = True
 
     # main loop
     def run(self):
@@ -72,7 +77,8 @@ class Bot(object):
         if text is not None:
 
             print(text)  # log
-            requests.get("http://localhost:8080", {"text": text})  # send to our display
+            if self.speak:
+                requests.get("http://localhost:8080", {"text": text})  # send to our display
 
             try:
                 r = requests.get(
@@ -106,7 +112,7 @@ class Bot(object):
                     elif intent == 'news':
                         self.__news_action()
                     elif intent == 'maps':
-                        self.__maps_action(entities)
+                        self.state = float(map_state)
                     elif intent == 'joke':
                         self.__joke_action()
                     elif intent == 'alarm_set':
@@ -116,7 +122,7 @@ class Bot(object):
                     elif intent == 'del_user':
                         self.state = float(delete_user_state)
                     elif intent == 'set_todo' or ("add" in text and "task" in text):
-                        self.__set_todo()
+                        self.state = float(set_todo_state)
                     elif intent == 'get_todo':
                         self.__get_todo()
                     elif intent == 'set_note':
@@ -126,7 +132,7 @@ class Bot(object):
                     elif intent == 'get_note':
                         self.__get_note()
                     elif intent == 'currency':
-                        self.__currency()
+                        self.state = float(currency_state)
                     elif intent == 'logout':
                         self.state = float(logout_state)
                     elif wiki and "tell" in text and "about" in text:
@@ -550,6 +556,139 @@ class Bot(object):
                                 "I'm sorry, I don't know about that yet.\n Are you sure about '" + self.new_user.password + "'?")
                             return
 
+                ###############################################################
+
+                if floor(self.state) == float(map_state):
+
+                    if self.state == float(map_state) + 0.0:
+                        location = None
+                        if entities is not None:
+                            if 'location' in entities:
+                                location = entities['location'][0]["value"]
+                            if "wikipedia_search_query" in entities:
+                                location = entities['wikipedia_search_query'][0]["value"]
+
+                        if location is not None:
+                            self.state = float(map_state) + 0.1
+                            self.speak = False
+                            maps_url = self.knowledge.get_map_url(location)
+                            maps_action = "Sure. Here's a map of %s." % location
+                            body = {'url': maps_url}
+                            print(body)
+                            requests.get("http://localhost:8080", {"image": (maps_url)})
+                            self.speech.synthesize_text(maps_action)
+                            return
+                        else:
+                            self.state = normal_state
+                            self.__text_action(
+                                "I'm sorry, I couldn't understand what location you wanted.")
+                            return
+
+                    if self.state == float(map_state) + 0.1:
+
+                        if intent == 'done':
+                            self.speak = True
+                            self.state = normal_state
+                            done = self.nlg.done()
+                            self.__text_action(done)
+                            return
+
+                ###############################################################
+
+                if floor(self.state) == float(set_todo_state):
+
+                    if self.state == float(set_todo_state) + 0.0:
+
+                        self.state = float(set_todo_state) + 0.1
+                        self.__text_action("what is your task?")
+                        return
+
+                    if self.state == float(set_todo_state) + 0.1:
+
+                        self.msg = text
+                        self.state = float(set_todo_state) + 0.2
+                        self.__text_action(
+                            "are you sure about '" + text + "'?")
+                        return
+
+                    if self.state == float(set_todo_state) + 0.2:
+
+                        if intent == 'yes':
+                            self.knowledge.set_todo(self.msg)
+                            self.state = normal_state
+                            self.__text_action("todo set!")
+                            return
+                        elif intent == 'no':
+                            self.state = float(set_todo_state) + 0.1
+                            self.__text_action("what is your task?")
+                            return
+                        else:  # No recognized intent
+                            self.__text_action(
+                                "I'm sorry, I don't know about that yet.")
+                            return
+
+                ###############################################################
+
+                # if floor(self.state) == float(idle_state):
+                #
+                #     if self.state == float(idle_state) + 0.0:
+                #
+                #         if "hey" in text and "there" in text:
+                #             self.state = float(idle_state) + 0.1
+                #             self.speak = False
+                #             maps_url = self.knowledge.get_map_url(location)
+                #             maps_action = "Sure. Here's a map of %s." % location
+                #             body = {'url': maps_url}
+                #             print(body)
+                #             requests.get("http://localhost:8080", {"image": (maps_url)})
+                #             self.speech.synthesize_text(maps_action)
+                #             return
+                #         else:
+                #             self.state = normal_state
+                #             self.__text_action(
+                #                 "I'm sorry, I couldn't understand what location you wanted.")
+                #             return
+                #
+                #     if self.state == float(idle_state) + 0.1:
+                #
+                #         if intent == 'done':
+                #             self.speak = True
+                #             self.state = normal_state
+                #             done = self.nlg.done()
+                #             self.__text_action(done)
+                #             return
+
+                ###############################################################
+
+                if floor(self.state) == float(currency_state):
+
+                    if self.state == float(currency_state) + 0.0:
+
+                        currency = self.knowledge.find_currency()
+
+                        if currency:
+                            requests.get("http://localhost:8080",
+                                         {"currency": ','.join(str(v) for v in currency)})
+                            self.state = float(currency_state) + 0.1
+                            self.speak = False
+                            return
+                        else:
+                            self.__text_action(
+                                        "I had some trouble finding currency rates for you")
+                            self.state = normal_state
+                            return
+
+                    if self.state == float(currency_state) + 0.1:
+
+                        if intent == 'done':
+                            self.speak = True
+                            self.state = normal_state
+                            done = self.nlg.done()
+                            self.__text_action(done)
+                            return
+
+                ###############################################################
+
             except Exception as e:
                 print("Failed wit!")
                 print(e)
@@ -561,21 +700,6 @@ class Bot(object):
     def __joke_action(self):
         joke = self.nlg.joke()
         self.__text_action(joke)
-
-    def __currency(self):
-        currency = self.knowledge.find_currency()
-        if currency:
-
-            self.__currency_action(currency)
-        else:
-            self.__text_action(
-                "I had some trouble finding currency rates for you")
-
-    def __currency_action(self, currencyrates=None):
-        if currencyrates is not None:
-            requests.get("http://localhost:8080",
-                         {"currency": ','.join(str(v) for v in currencyrates)})
-            print()
 
     def __news_action(self):
 
